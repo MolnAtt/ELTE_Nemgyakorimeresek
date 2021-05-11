@@ -1,5 +1,8 @@
 
 #include <iostream>
+/**/
+#include <fstream>
+/**/
 #include <unordered_map>
 
 using namespace std;
@@ -31,11 +34,10 @@ struct Output
 Input Beolvas();
 Output Feldolgoz(Input);
 void Kiir(Output);
+void GyorsRendez(int*, int i, int j);
 
 int main()
 {
-//	Beolvas();
-//	Feldolgoz(Beolvas());
 	Kiir(Feldolgoz(Beolvas()));
 }
 
@@ -72,32 +74,72 @@ Output Feldolgoz(Input be)
 		}
 	}
 
-
-	cerr << "------------------\na nyilvantartas:\n------------------\n";
 	j = 0;
+/** /
+	cerr << "------------------\na nyilvantartas:\n------------------\n";
 
+	ofstream f;
+	f.open("szotar.txt");
+/**/
 	for(auto p : nyilvantartas)
 	{
+/** /
 		cerr << "[" << p.first << "] = " << p.second << endl;
+		f << "[" << p.first << "] = " << p.second << endl;
+/**/
 		if (p.second <= be.k)
 		{
 			ki.T[j++] = p.first;
 		}
 	}
 
+	GyorsRendez(ki.T,0,j-1);
+//	f.close();
+
 	ki.n = j;
 	cerr << "------------------\n";
-
 	return ki;
 }
 
 void Kiir(Output ki)
 {
+/** /
+	ofstream f;
+	f.open("mo.txt");
+	f << ki.n << endl;
+/**/
 	cout << ki.n;
 	cerr << " db nem gyakori meresi eredmeny van, megpedig a kovetkezok:";
 	cout << endl;
 	for (int i = 0; i < ki.n; i++)
 	{
 		cout << ki.T[i] << endl;
+	//	f << ki.T[i] << endl;
+	}
+
+//	f.close();
+
+}
+
+
+void GyorsRendez(int* T, int e, int v)
+{
+	if (e < v)
+	{
+		int i = e;
+		int j = v;
+
+		while (i!=j)
+		{
+			if (i<j != T[i]<T[j])
+			{
+				swap(T[i], T[j]);
+				swap(i, j);
+			}
+			j += j < i ? 1 : -1;
+		}
+
+		GyorsRendez(T, e, i - 1);
+		GyorsRendez(T, i+1, v);
 	}
 }
